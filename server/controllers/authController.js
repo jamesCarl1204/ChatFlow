@@ -1,5 +1,6 @@
 const authModels = require('../models/authModels')
 const {body, validationResult} = require('express-validator')
+const bcrypt = require('bcrypt')
 
 const registerValidation = [
     body('password').isLength({min: 8}).withMessage('Password must be at least 8 characters')
@@ -13,6 +14,7 @@ const register_post = async (req, res) =>{
       }
 
       try{
+        
 
       const {email, password} = req.body
 
@@ -35,4 +37,4 @@ const register_post = async (req, res) =>{
 
 
 
-module.exports = {register_post}
+module.exports = {register_post, registerValidation}

@@ -23,7 +23,8 @@ function RegisterModal({onClose}) {
                 headers: {'Content-Type' : 'application/json'},
                 body: JSON.stringify(form)
             })
-            if(!res.ok) throw new Error('failed to save')
+            const data =await res.json()
+            if(!res.ok) throw new Error(data.msg || data.errors?.[0]?.msg)
                 setForm({email: '', password: ''});
         }catch(err) {
             console.log(err)
