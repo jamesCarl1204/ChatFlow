@@ -2,12 +2,14 @@ const notesModel = require('../models/notesModel')
 
 const addNotes = async (req, res) => {
     try {
-    const {notes} = await req.body
 
-    const content = await notesModel.insertNotes(notes)
+    const {notes} = await req.body
+    const userId = req.userId
+
+    const content = await notesModel.insertNotes(userId,notes)
 
     res.status(200).json({success: true})
-    
+
     } catch(err) {
         console.log(err)
     }

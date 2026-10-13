@@ -7,4 +7,6 @@ const {register_post, login_post, registerValidation} = require('../controllers/
 
 router.post('/register', registerValidation,register_post)
 router.post('/login', login_post)
+
+
 module.exports = router
