@@ -3,6 +3,7 @@ import { createPortal } from 'react-dom'
 import styles from './register.module.css'
 
 function RegisterModal({onClose}) {
+
     useEffect(() => {
         const onKey = (e) => e.key === 'Escape' && onClose()
         window.addEventListener('keydown', onKey)
@@ -15,6 +16,7 @@ function RegisterModal({onClose}) {
     const handleChange = (e) => {
         setForm({...form, [e.target.name]: e.target.value})
     }
+    
     const handleSubmit = async (e) => {
         e.preventDefault()
         try{

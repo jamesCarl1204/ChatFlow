@@ -1,14 +1,15 @@
 import styles from './Dashboard.module.css'
 import {useState, useEffect}  from'react'
 function Home() {
-
     const [notes, setNotes] = useState([])
+    const [notetext, setNoteText] = useState('')
 
     const fetchNotes = async () => {
         try{
-            const res = await fetch('http://localhost:5000/api/notes')
+            const res = await fetch('http://localhost:3000/api/notes',{method: 'GET', credentials: 'include'})
             const data = await res.json()
             setNotes(data)
+            console.log(data.msg)
 
         }catch(err) {
             console.error(err)
@@ -25,11 +26,14 @@ function Home() {
 
         const res = await fetch('http://localhost:3000/api/notes',{
             method:'POST',
+            credentials: 'include',
             headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({notes})
+            body: JSON.stringify({notes: notetext}),
         })
+        const data = res.json()
+        console.log(data.msg)
 
-        fetchNotes()
+       await fetchNotes()
     }
       return(
         <>
@@ -37,8 +41,8 @@ function Home() {
           <form className={styles.takenote} onSubmit={handleSubmit}>
              <h1>take a note</h1>
              <textarea
-             value={notes}
-             onChange={(e) => setNotes(e.target.value)}>
+             value={notetext}
+             onChange={(e) => setNoteText(e.target.value)}>
              </textarea>
              <button type="submit">Save Note</button>
           </form>
@@ -49,7 +53,6 @@ function Home() {
             <div className={styles.cardContainer}>
                 {notes.map((note) => (
                     <div className={styles.notesBox}>
-                        
                         <div>
                             <button>delete</button>
                             <button>open notes</button>
