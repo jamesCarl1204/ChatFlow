@@ -1,10 +1,15 @@
 const authModels = require('../models/authModels')
 const {body, validationResult} = require('express-validator')
 const bcrypt = require('bcrypt')
+const jwt = require('jsonwebtoken')
 
 const registerValidation = [
     body('password').isLength({min: 8}).withMessage('Password must be at least 8 characters')
 ]
+
+function createToken(id) {
+  return jwt.sign({id}, 'secret', {expiresIn: '3h'})
+}
 
 const register_post = async (req, res) =>{
       const errors = validationResult(req)
@@ -14,7 +19,7 @@ const register_post = async (req, res) =>{
       }
 
       try{
-        
+
 
       const {email, password} = req.body
 
@@ -35,6 +40,24 @@ const register_post = async (req, res) =>{
       }
 }
 
+const login_post = async (req,res) => {
+    const {email,password} = req.body
+    
+    const account = await authModels.getEmail(email)
+    console.log(password)
+    console.log(account)
+    const isMatch = await bcrypt.compare(password, account[0].password)
 
+    if(!isMatch) {
+        return res.status(400).json({success: false, msg: 'invalid email or password'})
+    }
 
-module.exports = {register_post, registerValidation}
+    const id = account[0].id
+
+    const token = createToken(id)
+    
+    res.cookie('jwt', token, {httpOnly: true, maxAge: 2 * 60 * 60 * 3000})
+    res.json({success: true, user: id})
+}
+
+module.exports = {register_post, registerValidation, login_post}
