@@ -8,6 +8,10 @@ const notesModel = {
     async insertNotes (userId, content) {
         const [result] = await pool.query('INSERT INTO notes(user_id, content) VALUES(?,?)',[userId, content])
         return result
+    },
+    async deleteNote(id, userId)  {
+        const [result] = await pool.query('DELETE FROM notes WHERE id = ? AND user_id', [id, userId])
+        return result
     }
 }
 
