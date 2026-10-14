@@ -8,8 +8,9 @@ function Home() {
         try{
             const res = await fetch('http://localhost:3000/api/notes',{method: 'GET', credentials: 'include'})
             const data = await res.json()
-            setNotes(data)
+            setNotes(data.data)
             console.log(data.msg)
+            console.log(notes)
 
         }catch(err) {
             console.error(err)
@@ -35,9 +36,32 @@ function Home() {
 
        await fetchNotes()
     }
+
+    const handleDelete = async (id) => {
+        const res = fetch(`http://localhost:3000/api/notes/${id}`,{
+            method: 'DELETE',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({id:id})
+        })
+    }
+
+    
       return(
         <>
         <div className={styles.container}>
+        <div className={styles.myNotes}>
+            <h1>MY NOTES</h1>
+            <input placeholder="search"/>
+            <ul className={styles.cardContainer}>
+                {notes.map((note) => (
+                    <li className={styles.notesBox} key={note.id}>
+                        {note.content}
+                        <button onClick={() => handleDelete(note.id)}><i class="fa-sharp fa-solid fa-trash"></i></button>
+                    </li>
+                ))}
+            </ul>
+          </div>
+
           <form className={styles.takenote} onSubmit={handleSubmit}>
              <h1>take a note</h1>
              <textarea
@@ -46,22 +70,6 @@ function Home() {
              </textarea>
              <button type="submit">Save Note</button>
           </form>
-
-          <div className={styles.myNotes}>
-            <h1>MY NOTES</h1>
-            <input placeholder="search"/>
-            <div className={styles.cardContainer}>
-                {notes.map((note) => (
-                    <div className={styles.notesBox}>
-                        <div>
-                            <button>delete</button>
-                            <button>open notes</button>
-                        </div>
-                    </div>
-                ))}
-                
-            </div>
-          </div>
         </div>
         </>
       )
