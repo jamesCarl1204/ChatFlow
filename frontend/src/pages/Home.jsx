@@ -38,11 +38,21 @@ function Home() {
     }
 
     const handleDelete = async (id) => {
-        const res = fetch(`http://localhost:3000/api/notes/${id}`,{
+        const res = await fetch(`http://localhost:3000/api/notes/${id}`,{
             method: 'DELETE',
+            credentials:'include',
             headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({id:id})
         })
+
+        const data = await res.json()
+
+        if(!res.ok) {
+            console.log(data.msg)
+            return
+        }
+
+        await fetchNotes()
+        
     }
 
     
