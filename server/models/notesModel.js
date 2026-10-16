@@ -12,6 +12,10 @@ const notesModel = {
     async deleteNote(id, userId)  {
         const [result] = await pool.query('DELETE FROM notes WHERE id = ? AND user_id', [id, userId])
         return result
+    },
+    async updateNote(content, id) {
+        const [result] = await pool.query('UPDATE notes SET content = ? WHERE id = ?', [content, id])
+        return result
     }
 }
 

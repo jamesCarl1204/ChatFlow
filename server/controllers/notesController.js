@@ -42,4 +42,16 @@ const deleteNote = async (req, res) => {
     }
 }
 
-module.exports = {showNotes, addNotes, deleteNote}
+const updateNote = async (req, res) => {
+    try {
+        const {id} = req.params;
+        const {data} = req.body
+        
+        const result = await notesModel.updateNote(data, id)
+        res.status(201).json({success: true, msg: 'updated'})
+    } catch(err) {
+        console.log(err)
+    }
+}
+
+module.exports = {showNotes, addNotes, deleteNote, updateNote}
