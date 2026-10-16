@@ -9,7 +9,7 @@ function Login() {
 
   const [showRegister, setShowRegister] = useState(false)
   const [form, setForm] = useState({email:'', password: ''})
-
+  const [error, setError] = useState('')
   const handleChange = (e) => {
      setForm({...form, [e.target.name]:e.target.value })
   }
@@ -28,6 +28,7 @@ function Login() {
 
         if(!res.ok) {
             console.log(data.msg)
+            setError(data.msg)
             return
         }
         navigate('/home')
@@ -42,23 +43,35 @@ function Login() {
         <>
         <div className={styles.container}>
             <div className={styles.wrapper}>
-                <h1>Login</h1>
+                <div className={styles.title}>
+                    <h1>Notes System</h1><span>Sign in access your notes</span>
+                    </div>
+                
+            <div className={styles.formContainer}>
+
             <form className={styles.form} onSubmit={handleSubmit}>
+                <label>EMAIL ADDRESS</label>
                 <input 
                 type="email"
                 name="email"
                 value={form.email}
                 onChange={handleChange}
                 placeholder="ex: carlo@gmail.com" />
+               <label>PASSWORD</label>
                 <input
                 type="password"
                 name="password"
                 value={form.password}
                 onChange={handleChange} 
                 placeholder="your password" />
+                <div className={styles.err}>{error}</div>
                 <button type="submit">Login</button>
             </form>
-            <button type="button" onClick={() => setShowRegister(true)} className={styles.register}>register here</button>
+            </div>
+             <footer className={styles.footer}>
+               <p>Don't have an account?</p>
+               <a type="button" onClick={() => setShowRegister(true)} className={styles.register}>register here</a>
+             </footer>
             {showRegister && (
                 <RegisterModal onClose={() => setShowRegister(false)}/>
             )}

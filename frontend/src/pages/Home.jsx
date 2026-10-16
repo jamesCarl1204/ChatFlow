@@ -62,6 +62,25 @@ function Home() {
         await fetchNotes()
     }
 
+    async function handleUpdateNote(noteId,content) {
+        try {
+        const res = await fetch(`http://localhost:3000/api/notes/${noteId}`, {
+            method: 'PUT',
+            credentials:'include',
+            headers: {'Content-Type':'application/json'},
+            body: JSON.stringify({data:content})
+        })
+        const data = await res.json()
+        console.log(data)
+        if(!res.ok) {
+            console.log(data.msg)
+        }
+        await fetchNotes()
+    }catch(err) {
+        console.log(err)
+    }
+    }
+
       return(
         <>
         <div className={styles.container}>
@@ -90,7 +109,7 @@ function Home() {
             <NotesModal 
             note={selectedNote}
             onClose={() => setShowModal(false)}
-           // onSave={handleUpdateNote}
+            onSave={handleUpdateNote}
             />
           )}
         </div>
