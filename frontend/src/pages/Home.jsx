@@ -1,8 +1,18 @@
 import styles from './Dashboard.module.css'
 import {useState, useEffect}  from'react'
+import NotesModal from '../componets/notesModal.jsx'
+
 function Home() {
+
     const [notes, setNotes] = useState([])
     const [notetext, setNoteText] = useState('')
+    const [showModal, setShowModal] = useState(false)
+    const [selectedNote, setSelectedNote] = useState(null)
+
+     const handleOpenNote = (note) => {
+        setSelectedNote(note);
+        setShowModal(true)
+    }
 
     const fetchNotes = async () => {
         try{
@@ -20,7 +30,6 @@ function Home() {
     useEffect(() => {
         fetchNotes()
     }, [])
-
 
     const handleSubmit = async (e) => {
         e.preventDefault()
@@ -50,12 +59,9 @@ function Home() {
             console.log(data.msg)
             return
         }
-
         await fetchNotes()
-        
     }
 
-    
       return(
         <>
         <div className={styles.container}>
@@ -64,9 +70,9 @@ function Home() {
             <input placeholder="search"/>
             <ul className={styles.cardContainer}>
                 {notes.map((note) => (
-                    <li className={styles.notesBox} key={note.id}>
+                    <li className={styles.notesBox} key={note.id} onClick ={() => handleOpenNote(note)}>
                         {note.content}
-                        <button onClick={() => handleDelete(note.id)}><i class="fa-sharp fa-solid fa-trash"></i></button>
+                        <button onClick={() => handleDelete(note.id)}><i className="fa-sharp fa-solid fa-trash"></i></button>
                     </li>
                 ))}
             </ul>
@@ -80,7 +86,15 @@ function Home() {
              </textarea>
              <button type="submit">Save Note</button>
           </form>
+          {showModal && (
+            <NotesModal 
+            note={selectedNote}
+            onClose={() => setShowModal(false)}
+           // onSave={handleUpdateNote}
+            />
+          )}
         </div>
+
         </>
       )
 }
