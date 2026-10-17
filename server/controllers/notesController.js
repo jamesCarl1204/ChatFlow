@@ -46,11 +46,13 @@ const updateNote = async (req, res) => {
     try {
         const {id} = req.params;
         const {data} = req.body
+        const userId = req.userId
         
         const result = await notesModel.updateNote(data, id)
         res.status(201).json({success: true, msg: 'updated'})
     } catch(err) {
         console.log(err)
+        res.status(400).json({success:false,msg:err})
     }
 }
 
