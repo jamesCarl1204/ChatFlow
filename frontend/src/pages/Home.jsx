@@ -84,9 +84,16 @@ function Home() {
       return(
         <>
         <div className={styles.container}>
-        <div className={styles.myNotes}>
+        <div className={styles.sidebar}>
+            
             <h1>MY NOTES</h1>
+            <hr/>
+            <div className={styles.searchContainer}>
             <input placeholder="search"/>
+            </div>
+            
+
+            <div>
             <ul className={styles.cardContainer}>
                 {notes.map((note) => (
                     <li className={styles.notesBox} key={note.id} onClick ={() => handleOpenNote(note)}>
@@ -95,10 +102,13 @@ function Home() {
                     </li>
                 ))}
             </ul>
+            </div>
           </div>
 
           <form className={styles.takenote} onSubmit={handleSubmit}>
              <h1>take a note</h1>
+             <input placeholder="Title:"/>
+             <hr/>
              <textarea
              value={notetext}
              onChange={(e) => setNoteText(e.target.value)}>
